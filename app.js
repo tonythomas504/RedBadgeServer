@@ -13,6 +13,8 @@ app.use(express.json());
 
 
 app.use("/user", controllers.usercontroller)
+app.use("/comment", controllers.commentscontroller)
+app.use("/playlist", controllers.playlistcontroller)
 
 
 db.authenticate()
