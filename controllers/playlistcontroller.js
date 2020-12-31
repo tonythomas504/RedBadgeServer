@@ -26,7 +26,8 @@ router.post('/createplaylist', validateSession, (req, res) => {
     
     const comment = {
         Title: req.body.Title,
-        Songs: req.body.Songs
+        Songs: req.body.Songs,
+        userId: req.user.id 
     };
     Playlist.create(comment)
         .then(comment => res.status(200).json(comment)
