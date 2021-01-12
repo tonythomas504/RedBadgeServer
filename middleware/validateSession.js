@@ -2,40 +2,32 @@ const jwt = require('jsonwebtoken');
 const {
   User
 } = require('../models');
-require('dotenv').config();
-const validateSession = (req, res, next) => {
-  const token = req.headers.authorization;
-  console.log('token -->', token);
-  if (req.method === 'OPTIONS') {
-    return next();
-  } else if (!token) {
-    return res.status(403).send({
-      auth: false,
-      message: "No token provided"
-    })
+
+module.exports = (req, res, next) => {
+  if (req.method == 'OPTIONS') {
+    next();   //allowing options as a method for request
   } else {
-    jwt.verify(token, process.env.JWT_SECRET, (err, decodeToken) => {
-      console.log('decodeToken -->', decodeToken);
-      if (!err && decodeToken) {
-        User.findOne({
-            where: {
-              id: decodeToken.id
-            }
-          })
-          .then(user => {
-            console.log('user -->', user);
-            if (!user) throw err;
-            console.log('req -->', req);
+    let sessionToken = req.headers.authorization;
+    console.log(sessionToken);
+    if (!sessionToken) {
+      res.status(403).send({ auth: false, message: "No token provided" });
+    } else {
+      jwt.verify(sessionToken, process.env.JWT_SECRET, (err, decoded) => {
+        console.log(decoded)
+        if (decoded) {
+          User.findOne({ where: { id: decoded.id } }).then(user => {
             req.user = user;
-            console.log('next -->', next);
-            return next();
-          })
-          .catch(err => next(err));
-      } else {
-        req.errors = err;
-        return res.status(500).send('Not Authorized');
-      }
-    });
+            console.log(`user: ${user}`)
+            next()
+          },
+            () => {
+              res.status(401).send({ error: "Not authorized" });
+            })
+        } else {
+          res.status(400).send({ error: "Really not authorized (can't decode)" })
+        }
+      })
+    }
   }
-};
-module.exports = validateSession;
+}
+

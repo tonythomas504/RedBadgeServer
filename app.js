@@ -1,9 +1,11 @@
 require('dotenv').config();
 
-const express = require("express"); 
+const express = require("express");
 const db = require("./db")
 
-const app = express() 
+
+const app = express()
+
 
 app.use(require('./middleware/headers'))
 const controllers = require("./controllers");
@@ -18,11 +20,11 @@ app.use("/playlist", controllers.playlistcontroller)
 
 
 db.authenticate()
-.then(() => db.sync()) 
-.then(() => {
-    app.listen(process.env.PORT, () => console.log(`[Server: ] App is listening on Port ${process.env.PORT}`))
+    .then(() => db.sync())
+    .then(() => {
+        app.listen(process.env.PORT, () => console.log(`[Server: ] App is listening on Port ${process.env.PORT}`))
     })
-    .catch((err)=> {
+    .catch((err) => {
         console.log("[Server: ] Server Crashed");
         console.error(err)
     })

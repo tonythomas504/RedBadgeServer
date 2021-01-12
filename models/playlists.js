@@ -7,9 +7,11 @@ const Playlist = db.define('playlist',{
         allowNull: false
     },
     Songs: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         allowNull:false
-    }
+    },
+    
+
 })
 
 module.exports = Playlist

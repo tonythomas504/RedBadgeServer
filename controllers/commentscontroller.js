@@ -1,8 +1,9 @@
 const router = require('express').Router()
-const {Comments} = require('../models')
+const { Comments } = require('../models')
 const validateSession = require('../middleware/validateSession')
 
-router.get("/mycomments",  (req, res) => {
+router.get("/mycomments", (req, res) => {
+
     Comments.findAll()
         .then(comment => res.status(200).json(comment))
         .catch(err => res.status(500).json({
@@ -10,7 +11,7 @@ router.get("/mycomments",  (req, res) => {
         }))
 })
 
-router.get("/:id", validateSession, (req, res) => {
+router.get("/:id", (req, res) => {
     Comments.findOne({
         where: {
             id: req.params.id
@@ -22,8 +23,8 @@ router.get("/:id", validateSession, (req, res) => {
         }))
 })
 
-router.post('/createcomment', validateSession, (req, res) => {
-    
+router.post('/createcomment', (req, res) => {
+
     const comment = {
         Title: req.body.Title,
         Body: req.body.Body,
@@ -36,11 +37,11 @@ router.post('/createcomment', validateSession, (req, res) => {
 })
 
 
-router.put("/:id", (req,res)=> {
+router.put("/:id", (req, res) => {
     const query = req.params.id;
 
-    Comments.update(req.body, 
-        { where: {id: query } })
+    Comments.update(req.body,
+        { where: { id: query } })
         .then((commentUpdated) => {
             Comments.findOne({
                 where: {
@@ -59,12 +60,12 @@ router.put("/:id", (req,res)=> {
         .catch((err) => res.json(err));
 });
 
-router.delete('/:id', (req,res) => {
+router.delete('/:id', (req, res) => {
     Comments.destroy({
-        where: {id: req.params.id}
+        where: { id: req.params.id }
     })
-    .then(comment => res.status(200).json(comment))
-    .catch(err => res.json(err))
+        .then(comment => res.status(200).json(comment))
+        .catch(err => res.json(err))
 })
 
 module.exports = router
