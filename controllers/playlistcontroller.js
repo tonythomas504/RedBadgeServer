@@ -34,7 +34,7 @@ router.post('/createplaylist', (req, res) => {
     const playlist = {
         Title: req.body.Title,
         Songs: req.body.Songs,
-        userId: req.user.id
+
     };
     Playlist.create(playlist)
         .then(playlist => res.status(200).json(playlist))

@@ -28,7 +28,6 @@ router.post('/createcomment', (req, res) => {
     const comment = {
         Title: req.body.Title,
         Body: req.body.Body,
-        userId: req.user.id
     };
     Comments.create(comment)
         .then(comment => res.status(200).json(comment)
