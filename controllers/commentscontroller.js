@@ -60,11 +60,14 @@ router.put("/:id", (req, res) => {
 });
 
 router.delete('/:id', (req, res) => {
+
+
     Comments.destroy({
         where: { id: req.params.id }
     })
         .then(comment => res.status(200).json(comment))
         .catch(err => res.json(err))
+
 })
 
 module.exports = router

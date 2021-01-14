@@ -64,14 +64,18 @@ router.put("/:id", (req, res) => {
         })
 
         .catch((err) => res.json(err));
+
 });
 
 router.delete('/:id', (req, res) => {
+
+
     Playlist.destroy({
         where: { id: req.params.id }
     })
         .then(comment => res.status(200).json(comment))
         .catch(err => res.json(err))
+
 })
 
 module.exports = router
